@@ -2084,8 +2084,145 @@ footer { padding-top: 24px; }
 .decoder-options button b { color: #234f88; font: 750 21px "DM Mono", monospace; }
 .decoder-options button span { margin-top: 10px; color: #3f586e; font-size: 12px; }
 
+/* Five-part API 2 practice trail. */
+.practice-intro {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  max-width: 650px;
+}
+.practice-summary {
+  flex: 0 0 auto;
+  min-width: 104px;
+  padding: 10px 12px;
+  border: 1px solid #9fcfcd;
+  border-radius: 13px;
+  color: #056f72;
+  background: #e9f7f5;
+  text-align: center;
+}
+.practice-summary strong,
+.practice-summary span { display: block; }
+.practice-summary strong { font: 800 17px "DM Mono", monospace; }
+.practice-summary span { margin-top: 2px; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.practice-card { position: relative; overflow: hidden; }
+.practice-card::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, #2f60a0, #0aa7d8, #16a394);
+  opacity: .78;
+}
+.practice-card.test-complete {
+  border-color: #8bc9c4;
+  box-shadow: 0 12px 27px rgba(8,127,114,.12);
+}
+.practice-card.test-complete::before {
+  content: "✓ läbitud";
+  position: absolute;
+  right: 25px;
+  bottom: 19px;
+  color: rgba(5,111,114,.12);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  pointer-events: none;
+}
+.test-progress-line i { width: 0; }
+.test-options,
+.workflow-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+.test-options button {
+  min-height: 104px;
+  padding: 14px;
+  border: 1px solid #afc4d2;
+  border-radius: 14px;
+  color: #102f55;
+  background: #f8fafb;
+  cursor: pointer;
+  text-align: left;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.test-options button .answer-key,
+.test-options button span { display: block; }
+.test-options button .answer-key { color: #2f60a0; font: 750 19px "DM Mono", monospace; }
+.test-options button span { margin-top: 11px; color: #38546b; font-size: 13px; line-height: 1.38; }
+.test-options button.correct { border-color: #76c1be; background: #e6f6f4; }
+.test-options button.correct .answer-key { color: #087f82; }
+.test-options button.wrong { border-color: #e2a8b0; background: #fcebee; }
+.test-options button.wrong .answer-key { color: #b13a4a; }
+.test-options button:disabled { cursor: default; transform: none; }
+.code-options button span { font-family: "DM Mono", monospace; font-size: 12px; overflow-wrap: anywhere; }
+.workflow-board { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.workflow-board button {
+  position: relative;
+  min-height: 118px;
+  padding: 17px 15px 15px 52px;
+  border: 1px solid #afc4d2;
+  border-radius: 14px;
+  color: #102f55;
+  background: #f8fafb;
+  cursor: pointer;
+  text-align: left;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.workflow-board button:hover { transform: translateY(-2px); border-color: #4f99bd; background: #edf7fb; }
+.workflow-board button > span {
+  position: absolute;
+  left: 14px;
+  top: 15px;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  color: #fff;
+  background: #2f60a0;
+  font: 800 13px "DM Mono", monospace;
+}
+.workflow-board code,
+.workflow-board small { display: block; }
+.workflow-board code { color: #173d69; font: 700 12px/1.45 "DM Mono", monospace; overflow-wrap: anywhere; }
+.workflow-board small { margin-top: 9px; color: #526d82; font-size: 11px; line-height: 1.35; }
+.workflow-board button.placed { border-color: #76c1be; background: #e6f6f4; }
+.workflow-board button.placed > span { background: #087f82; }
+.workflow-board button.wrong { animation: wrong-step .42s ease; border-color: #d17c90; background: #fff0f3; }
+@keyframes wrong-step {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-5px); }
+  65% { transform: translateX(5px); }
+}
+.test-action-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 14px;
+}
+.test-action-row .test-feedback { flex: 1 1 auto; margin: 0; }
+.next-question {
+  flex: 0 0 auto;
+  min-width: 132px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 11px;
+  color: #fff;
+  background: linear-gradient(135deg, #2f60a0, #087f82);
+  box-shadow: 0 7px 16px rgba(25,86,130,.2);
+  cursor: pointer;
+  font-weight: 800;
+}
+.next-question:hover { transform: translateY(-1px); filter: brightness(1.04); }
+.practice-suite.locked .next-question { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .test-question.question-updated { animation: none; }
+  .workflow-board button.wrong { animation: none; }
 }
 
 /* Author, tools and methodology footer, adapted from the Sim32 pattern. */
@@ -2140,6 +2277,8 @@ footer { padding-top: 24px; }
 @media (max-width: 900px) {
   .practice-suite-head { align-items: flex-start; flex-direction: column; gap: 8px; }
   .practice-suite-head p { max-width: none; text-align: left; }
+  .practice-intro { align-items: flex-start; justify-content: space-between; width: 100%; max-width: none; }
+  .workflow-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-footer { grid-template-columns: 1fr; gap: 12px; }
   .footer-author { padding: 0 0 14px; border-right: 0; border-bottom: 1px solid #c4d5e0; }
   .footer-details { grid-template-columns: 1fr 1fr; }
@@ -2162,11 +2301,18 @@ footer { padding-top: 24px; }
   .concept-question { padding: 16px; }
   .decoder-options,
   .compass-card .method-options,
-  .concept-options { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .concept-options,
+  .test-options { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .decoder-options button,
   .method-options button,
   .concept-options button { min-height: 94px; }
   .footer-details { grid-template-columns: 1fr; }
   .footer-workflow { grid-column: auto; }
   .footer-note { flex-direction: column; gap: 7px; }
+  .practice-intro { flex-direction: column; }
+  .practice-summary { width: 100%; }
+  .workflow-board { grid-template-columns: 1fr; gap: 10px; }
+  .workflow-board button { min-height: 96px; }
+  .test-action-row { flex-direction: column; }
+  .next-question { min-height: 44px; width: 100%; }
 }

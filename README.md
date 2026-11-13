@@ -1,4 +1,4 @@
-# API1 · API päringulabor
+# API2 · API päringulabor
 
 Interaktiivne eestikeelne õppesimulatsioon, mis aitab tudengil läbi teha Statistikaameti tabeli PA111 API-töövoo:
 
@@ -15,7 +15,7 @@ Rakendus kasutab HTML5, CSS3 ja JavaScripti (ES2022). See ei vaja ehitussammu eg
 
 GitHub Pages avaldab `dist/` kausta aadressile:
 
-`https://<GITHUBI-KASUTAJANIMI>.github.io/API1/`
+`https://siimkl.github.io/API2/`
 
 ## Kohalik käivitamine
 

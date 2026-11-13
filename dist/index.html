@@ -11,7 +11,7 @@
   <main class="shell" id="app">
     <header class="hero">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> ANDMEPÄDEVUS · API 1</div>
+        <div class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> ANDMEPÄDEVUS · API 2</div>
         <h1>Saada päring.<br><span>Loe vastust.</span></h1>
         <p>Vaata, kuidas klient saadab API-le päringu ja saab vastuse. Leia tabeli valikud, küsi andmed ning kontrolli, kas said õiged andmed.</p>
       </div>
@@ -191,60 +191,75 @@ Accept: application/json</pre>
 
     <section class="practice-suite locked" aria-labelledby="practiceTitle" aria-disabled="true">
       <header class="practice-suite-head">
-        <div><span class="section-kicker">KINNISTA ÕPITU</span><h2 id="practiceTitle">Kolm lühitesti</h2></div>
-        <p>Vali igas olukorras parim vastus. Pärast valikut näed kohe selgitust.</p>
+        <div><span class="section-kicker">KINNISTA ÕPITU</span><h2 id="practiceTitle">Viis õppemängu</h2></div>
+        <div class="practice-intro">
+          <p>Katseta nii API 1 alusteadmisi kui ka API 2 uusi RStudio ja avalike API-de teemasid. Iga vastus annab kohe põhjenduse.</p>
+          <div class="practice-summary" aria-live="polite"><strong id="practiceCompleted">0 / 5</strong><span>testi läbitud</span></div>
+        </div>
       </header>
       <div class="practice-grid">
 
-    <section class="decoder-card practice-card card">
-      <div class="decoder-head test-head">
-        <div><span class="section-kicker test-kicker" id="decoderKicker">TEST 1 / 3 · OLEKUKOODID</span><h2>Milline olekukood sobib?</h2></div>
-        <div class="decoder-score test-score"><span id="decoderRound">1 / 4</span><b id="decoderScore">0 õiget</b></div>
-      </div>
-      <div class="test-progress-line test-progress" aria-hidden="true"><i id="decoderBar"></i></div>
-      <div class="decoder-challenge">
-        <div class="decoder-signal test-question question-tone-0"><span class="question-label">KÜSIMUS <b id="decoderQuestionNumber">1 / 4</b></span><p><b>OLUKORD:</b> <span id="decoderPrompt">Päringu JSON on vigases vormingus.</span></p></div>
-        <div class="decoder-options test-options" id="decoderOptions">
-          <button type="button" data-code="400"><b>400</b><span>Bad Request</span></button>
-          <button type="button" data-code="401"><b>401</b><span>Unauthorized</span></button>
-          <button type="button" data-code="404"><b>404</b><span>Not Found</span></button>
-          <button type="button" data-code="429"><b>429</b><span>Too Many</span></button>
-        </div>
-        <div class="test-feedback" id="decoderHint" aria-live="polite">Vali kõige sobivam olekukood.</div>
-      </div>
-    </section>
+        <section class="practice-card workflow-test card" data-test="workflow">
+          <div class="test-head">
+            <div><span class="section-kicker test-kicker" id="workflowKicker">TEST 1 / 5 · TÖÖVOO RALLI</span><h2>Pane R-i töövoog järjekorda</h2></div>
+            <div class="test-score"><span id="workflowRound">0 / 6</span><b id="workflowScore">start</b></div>
+          </div>
+          <div class="test-progress-line test-progress" aria-hidden="true"><i id="workflowBar"></i></div>
+          <div class="test-question question-tone-0"><span class="question-label">JÄRGMINE SAMM <b id="workflowQuestionNumber">1 / 6</b></span><p id="workflowPrompt">Alusta paketi laadimisest. Seejärel liigu metaandmetest andmetabelini.</p></div>
+          <div class="workflow-board" id="workflowOptions" aria-label="R-i töövoo sammud">
+            <button type="button" data-step="3"><span>?</span><code>valik &lt;- list(...)</code><small>Määra soovitud andmed</small></button>
+            <button type="button" data-step="5"><span>?</span><code>palgad &lt;- as.data.frame(vastus)</code><small>Muuda vastus tabeliks</small></button>
+            <button type="button" data-step="1"><span>?</span><code>url &lt;- ".../PA111"</code><small>Salvesta API aadress</small></button>
+            <button type="button" data-step="0"><span>?</span><code>library(pxweb)</code><small>Laadi R-i pakett</small></button>
+            <button type="button" data-step="4"><span>?</span><code>vastus &lt;- pxweb_get(url, query = valik)</code><small>Küsi statistilised andmed</small></button>
+            <button type="button" data-step="2"><span>?</span><code>metaandmed &lt;- pxweb_get(url)</code><small>Uuri võimalikke valikuid</small></button>
+          </div>
+          <div class="test-feedback" id="workflowFeedback" aria-live="polite">Klõpsa sammul, mis peab tulema esimesena.</div>
+        </section>
 
-    <section class="compass-card practice-card card">
-      <div class="method-head test-head">
-        <div><span class="section-kicker test-kicker" id="methodKicker">TEST 2 / 3 · MEETODI VALIK</span><h2>Milline meetod sobib?</h2></div>
-        <div class="method-score test-score"><span id="methodRound">1 / 5</span><b id="methodScore">0 punkti</b></div>
-      </div>
-      <div class="method-progress-line test-progress" aria-hidden="true"><i id="methodBar"></i></div>
-      <div class="method-question test-question question-tone-0"><span class="question-label">KÜSIMUS <b id="methodQuestionNumber">1 / 5</b></span><p id="methodScenario">Vaja on kolme väärtust ühest veebitabelist.</p></div>
-      <div class="method-options test-options" id="methodOptions">
-        <button type="button" data-method="manual"><span>01</span><b>Käsitsi</b><small>Veebiliides</small></button>
-        <button type="button" data-method="file"><span>02</span><b>Fail</b><small>CSV või kohalik fail</small></button>
-        <button type="button" data-method="api"><span>03</span><b>API</b><small>Korduv andmevahetus</small></button>
-        <button type="button" data-method="scrape"><span>04</span><b>Kraapimine</b><small>Kui API puudub</small></button>
-      </div>
-      <div class="method-feedback" id="methodFeedback" aria-live="polite">Tee valik, et saada kohe tagasisidet.</div>
-    </section>
+        <section class="practice-card quiz-card card" data-test="rcode">
+          <div class="test-head">
+            <div><span class="section-kicker test-kicker" id="rcodeKicker">TEST 2 / 5 · R-KOODILABOR</span><h2>Täida R-koodi lünk</h2></div>
+            <div class="test-score"><span id="rcodeRound">1 / 4</span><b id="rcodeScore">0 õiget</b></div>
+          </div>
+          <div class="test-progress-line test-progress" aria-hidden="true"><i id="rcodeBar"></i></div>
+          <div class="test-question question-tone-0"><span class="question-label">KÜSIMUS <b id="rcodeQuestionNumber">1 / 4</b></span><p id="rcodePrompt"></p></div>
+          <div class="test-options quiz-options" id="rcodeOptions"></div>
+          <div class="test-action-row"><div class="test-feedback" id="rcodeFeedback" aria-live="polite">Vali puuduv käsk või tulemus.</div><button class="next-question" id="rcodeNext" type="button" hidden>Järgmine →</button></div>
+        </section>
 
-    <section class="concept-card practice-card card">
-      <div class="concept-head test-head">
-        <div><span class="section-kicker test-kicker" id="conceptKicker">TEST 3 / 3 · API MÕISTMINE</span><h2>Mida API vastus tähendab?</h2></div>
-        <div class="concept-score test-score"><span id="conceptRound">1 / 4</span><b id="conceptScore">0 õiget</b></div>
-      </div>
-      <div class="test-progress-line test-progress" aria-hidden="true"><i id="conceptBar"></i></div>
-      <div class="concept-question test-question question-tone-0"><span class="question-label">KÜSIMUS <b id="conceptQuestionNumber">1 / 4</b></span><p id="conceptPrompt">Mida saad teada GET-päringuga tabelile PA111?</p></div>
-      <div class="concept-options test-options" id="conceptOptions">
-        <button type="button" data-answer="0"><b>A</b><span>Palgaandmed kohe</span></button>
-        <button type="button" data-answer="1"><b>B</b><span>Tabeli muutujad ja valikud</span></button>
-        <button type="button" data-answer="2"><b>C</b><span>Ainult failinime</span></button>
-        <button type="button" data-answer="3"><b>D</b><span>RStudio joonise</span></button>
-      </div>
-      <div class="concept-feedback test-feedback" id="conceptFeedback" aria-live="polite">Vali üks vastus.</div>
-    </section>
+        <section class="practice-card quiz-card card" data-test="url">
+          <div class="test-head">
+            <div><span class="section-kicker test-kicker" id="urlKicker">TEST 3 / 5 · URL-I EHITAJA</span><h2>Pane Open‑Meteo päring tööle</h2></div>
+            <div class="test-score"><span id="urlRound">1 / 4</span><b id="urlScore">0 õiget</b></div>
+          </div>
+          <div class="test-progress-line test-progress" aria-hidden="true"><i id="urlBar"></i></div>
+          <div class="test-question question-tone-0"><span class="question-label">PÄRINGUJUHE <b id="urlQuestionNumber">1 / 4</b></span><p id="urlPrompt"></p></div>
+          <div class="test-options quiz-options code-options" id="urlOptions"></div>
+          <div class="test-action-row"><div class="test-feedback" id="urlFeedback" aria-live="polite">Vali õige URL-i osa.</div><button class="next-question" id="urlNext" type="button" hidden>Järgmine →</button></div>
+        </section>
+
+        <section class="practice-card quiz-card card" data-test="method">
+          <div class="test-head">
+            <div><span class="section-kicker test-kicker" id="methodKicker">TEST 4 / 5 · MEETODIKOMPASS</span><h2>Vali ülesandele sobiv tee</h2></div>
+            <div class="test-score"><span id="methodRound">1 / 5</span><b id="methodScore">0 õiget</b></div>
+          </div>
+          <div class="test-progress-line test-progress" aria-hidden="true"><i id="methodBar"></i></div>
+          <div class="test-question question-tone-0"><span class="question-label">OLUKORD <b id="methodQuestionNumber">1 / 5</b></span><p id="methodPrompt"></p></div>
+          <div class="test-options quiz-options" id="methodOptions"></div>
+          <div class="test-action-row"><div class="test-feedback" id="methodFeedback" aria-live="polite">Vali kõige praktilisem meetod.</div><button class="next-question" id="methodNext" type="button" hidden>Järgmine →</button></div>
+        </section>
+
+        <section class="practice-card quiz-card card" data-test="detective">
+          <div class="test-head">
+            <div><span class="section-kicker test-kicker" id="detectiveKicker">TEST 5 / 5 · VASTUSEDETEKTIIV</span><h2>Kas oskad tulemust tõlgendada?</h2></div>
+            <div class="test-score"><span id="detectiveRound">1 / 6</span><b id="detectiveScore">0 õiget</b></div>
+          </div>
+          <div class="test-progress-line test-progress" aria-hidden="true"><i id="detectiveBar"></i></div>
+          <div class="test-question question-tone-0"><span class="question-label">TÕEND <b id="detectiveQuestionNumber">1 / 6</b></span><p id="detectivePrompt"></p></div>
+          <div class="test-options quiz-options" id="detectiveOptions"></div>
+          <div class="test-action-row"><div class="test-feedback" id="detectiveFeedback" aria-live="polite">Vali kõige täpsem järeldus.</div><button class="next-question" id="detectiveNext" type="button" hidden>Järgmine →</button></div>
+        </section>
 
       </div>
     </section>
