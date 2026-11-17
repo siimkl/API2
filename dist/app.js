@@ -759,8 +759,8 @@
       card.hidden = card.dataset.test !== id;
     });
     syncTestMap();
-    $(`button[data-open-test="${id}"]`, els.testMap)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     if (shouldScroll) {
+      $(`button[data-open-test="${id}"]`, els.testMap)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
       window.setTimeout(() => $(`[data-test="${id}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 40);
     }
     syncHeight();
