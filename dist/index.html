@@ -11,7 +11,12 @@
   <main class="shell" id="app">
     <header class="hero">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> ANDMEPÄDEVUS · API 2</div>
+        <div class="course-lockup" aria-label="Andmepädevus, API 2, 2026/2027 sügissemester">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <strong>ANDMEPÄDEVUS</strong>
+          <span class="course-api">API 2</span>
+          <small>2026/2027 · SÜGISSEMESTER</small>
+        </div>
         <h1>Saada päring.<br><span>Loe vastust.</span></h1>
         <p>Vaata, kuidas klient saadab API-le päringu ja saab vastuse. Leia tabeli valikud, küsi andmed ning kontrolli, kas said õiged andmed.</p>
       </div>
@@ -191,20 +196,28 @@ Accept: application/json</pre>
 
     <section class="practice-suite locked" aria-labelledby="practiceTitle" aria-disabled="true">
       <header class="practice-suite-head">
-        <div><span class="section-kicker">KINNISTA ÕPITU</span><h2 id="practiceTitle">Viis õppemängu</h2></div>
+        <div><span class="section-kicker">KINNISTA ÕPITU</span><h2 id="practiceTitle">Kontrolli oma teadmisi</h2></div>
         <div class="practice-intro">
-          <p>Katseta nii API 1 alusteadmisi kui ka API 2 uusi RStudio ja avalike API-de teemasid. Iga vastus annab kohe põhjenduse.</p>
-          <div class="practice-summary" aria-live="polite"><strong id="practiceCompleted">0 / 5</strong><span>testi läbitud</span></div>
+          <p>Liigu rajal vasakult paremale. Vale vastus avab vihje ja lubab uuesti proovida; õige vastus selgitab, miks see töötab.</p>
+          <div class="practice-summary" aria-live="polite"><strong id="practiceCompleted">0 / 5</strong><span>harjutust tehtud</span></div>
         </div>
       </header>
+      <nav class="test-map" id="testMap" aria-label="Harjutuste järjekord">
+        <button class="active" type="button" data-open-test="workflow" aria-current="step"><span>1</span><b>Töövoog</b><small>praegu</small></button>
+        <button type="button" data-open-test="rcode" disabled><span>2</span><b>R-kood</b><small>lukus</small></button>
+        <button type="button" data-open-test="url" disabled><span>3</span><b>URL</b><small>lukus</small></button>
+        <button type="button" data-open-test="method" disabled><span>4</span><b>Meetod</b><small>lukus</small></button>
+        <button type="button" data-open-test="detective" disabled><span>5</span><b>Tõlgendus</b><small>lukus</small></button>
+      </nav>
       <div class="practice-grid">
 
         <section class="practice-card workflow-test card" data-test="workflow">
           <div class="test-head">
-            <div><span class="section-kicker test-kicker" id="workflowKicker">TEST 1 / 5 · TÖÖVOO RALLI</span><h2>Pane R-i töövoog järjekorda</h2></div>
+            <div><span class="section-kicker test-kicker" id="workflowKicker">1 / 5 · R-I TÖÖVOOG</span><h2>Pane R-i tööetapid õigesse järjekorda</h2></div>
             <div class="test-score"><span id="workflowRound">0 / 6</span><b id="workflowScore">start</b></div>
           </div>
           <div class="test-progress-line test-progress" aria-hidden="true"><i id="workflowBar"></i></div>
+          <div class="learning-goal"><span>MIDA ÕPID</span><p>Seostad R-i käsud päris API-päringu loogilise järjekorraga. Vale valik annab suunava vihje, mitte karistuse.</p></div>
           <div class="test-question question-tone-0"><span class="question-label">JÄRGMINE SAMM <b id="workflowQuestionNumber">1 / 6</b></span><p id="workflowPrompt">Alusta paketi laadimisest. Seejärel liigu metaandmetest andmetabelini.</p></div>
           <div class="workflow-board" id="workflowOptions" aria-label="R-i töövoo sammud">
             <button type="button" data-step="3"><span>?</span><code>valik &lt;- list(...)</code><small>Määra soovitud andmed</small></button>
@@ -214,53 +227,66 @@ Accept: application/json</pre>
             <button type="button" data-step="4"><span>?</span><code>vastus &lt;- pxweb_get(url, query = valik)</code><small>Küsi statistilised andmed</small></button>
             <button type="button" data-step="2"><span>?</span><code>metaandmed &lt;- pxweb_get(url)</code><small>Uuri võimalikke valikuid</small></button>
           </div>
-          <div class="test-feedback" id="workflowFeedback" aria-live="polite">Klõpsa sammul, mis peab tulema esimesena.</div>
+          <div class="test-action-row"><div class="test-feedback" id="workflowFeedback" aria-live="polite">Klõpsa sammul, mis peab tulema esimesena.</div><button class="next-question" id="workflowNext" type="button" hidden>Jätka R-i käskude juurde →</button></div>
         </section>
 
-        <section class="practice-card quiz-card card" data-test="rcode">
+        <section class="practice-card quiz-card card" data-test="rcode" hidden>
           <div class="test-head">
-            <div><span class="section-kicker test-kicker" id="rcodeKicker">TEST 2 / 5 · R-KOODILABOR</span><h2>Täida R-koodi lünk</h2></div>
+            <div><span class="section-kicker test-kicker" id="rcodeKicker">2 / 5 · R-I KÄSUD</span><h2>Vali sobiv R-i käsk</h2></div>
             <div class="test-score"><span id="rcodeRound">1 / 4</span><b id="rcodeScore">0 õiget</b></div>
           </div>
           <div class="test-progress-line test-progress" aria-hidden="true"><i id="rcodeBar"></i></div>
+          <div class="learning-goal"><span>MIDA ÕPID</span><p>Tunned ära käsud, millega R-is valikuid koondada, tabeli ehitust uurida ja tulemuse mahtu kontrollida.</p></div>
           <div class="test-question question-tone-0"><span class="question-label">KÜSIMUS <b id="rcodeQuestionNumber">1 / 4</b></span><p id="rcodePrompt"></p></div>
+          <div class="quiz-support"><button class="hint-button" id="rcodeHint" type="button">💡 Ava vihje</button><p class="hint-panel" id="rcodeHintPanel" hidden></p></div>
           <div class="test-options quiz-options" id="rcodeOptions"></div>
           <div class="test-action-row"><div class="test-feedback" id="rcodeFeedback" aria-live="polite">Vali puuduv käsk või tulemus.</div><button class="next-question" id="rcodeNext" type="button" hidden>Järgmine →</button></div>
         </section>
 
-        <section class="practice-card quiz-card card" data-test="url">
+        <section class="practice-card quiz-card card" data-test="url" hidden>
           <div class="test-head">
-            <div><span class="section-kicker test-kicker" id="urlKicker">TEST 3 / 5 · URL-I EHITAJA</span><h2>Pane Open‑Meteo päring tööle</h2></div>
+            <div><span class="section-kicker test-kicker" id="urlKicker">3 / 5 · URL-PÄRING</span><h2>Koosta toimiv Open‑Meteo päring</h2></div>
             <div class="test-score"><span id="urlRound">1 / 4</span><b id="urlScore">0 õiget</b></div>
           </div>
           <div class="test-progress-line test-progress" aria-hidden="true"><i id="urlBar"></i></div>
+          <div class="learning-goal"><span>MIDA ÕPID</span><p>Ehitad GET-aadressi sammhaaval ning mõistad, kuidas URL-i parameetrid API-le valikud edasi annavad.</p></div>
           <div class="test-question question-tone-0"><span class="question-label">PÄRINGUJUHE <b id="urlQuestionNumber">1 / 4</b></span><p id="urlPrompt"></p></div>
+          <div class="quiz-support"><button class="hint-button" id="urlHint" type="button">💡 Ava vihje</button><p class="hint-panel" id="urlHintPanel" hidden></p></div>
           <div class="test-options quiz-options code-options" id="urlOptions"></div>
           <div class="test-action-row"><div class="test-feedback" id="urlFeedback" aria-live="polite">Vali õige URL-i osa.</div><button class="next-question" id="urlNext" type="button" hidden>Järgmine →</button></div>
         </section>
 
-        <section class="practice-card quiz-card card" data-test="method">
+        <section class="practice-card quiz-card card" data-test="method" hidden>
           <div class="test-head">
-            <div><span class="section-kicker test-kicker" id="methodKicker">TEST 4 / 5 · MEETODIKOMPASS</span><h2>Vali ülesandele sobiv tee</h2></div>
+            <div><span class="section-kicker test-kicker" id="methodKicker">4 / 5 · MEETODI VALIK</span><h2>Vali sobiv andmehankimise viis</h2></div>
             <div class="test-score"><span id="methodRound">1 / 5</span><b id="methodScore">0 õiget</b></div>
           </div>
           <div class="test-progress-line test-progress" aria-hidden="true"><i id="methodBar"></i></div>
+          <div class="learning-goal"><span>MIDA ÕPID</span><p>Valid tehnoloogia asemel ülesande järgi: kui palju andmeid vajad, kas töö kordub ja milline ligipääs on olemas.</p></div>
           <div class="test-question question-tone-0"><span class="question-label">OLUKORD <b id="methodQuestionNumber">1 / 5</b></span><p id="methodPrompt"></p></div>
+          <div class="quiz-support"><button class="hint-button" id="methodHint" type="button">💡 Ava vihje</button><p class="hint-panel" id="methodHintPanel" hidden></p></div>
           <div class="test-options quiz-options" id="methodOptions"></div>
           <div class="test-action-row"><div class="test-feedback" id="methodFeedback" aria-live="polite">Vali kõige praktilisem meetod.</div><button class="next-question" id="methodNext" type="button" hidden>Järgmine →</button></div>
         </section>
 
-        <section class="practice-card quiz-card card" data-test="detective">
+        <section class="practice-card quiz-card card" data-test="detective" hidden>
           <div class="test-head">
-            <div><span class="section-kicker test-kicker" id="detectiveKicker">TEST 5 / 5 · VASTUSEDETEKTIIV</span><h2>Kas oskad tulemust tõlgendada?</h2></div>
+            <div><span class="section-kicker test-kicker" id="detectiveKicker">5 / 5 · VASTUSE TÕLGENDAMINE</span><h2>Tõlgenda API vastust</h2></div>
             <div class="test-score"><span id="detectiveRound">1 / 6</span><b id="detectiveScore">0 õiget</b></div>
           </div>
           <div class="test-progress-line test-progress" aria-hidden="true"><i id="detectiveBar"></i></div>
+          <div class="learning-goal"><span>MIDA ÕPID</span><p>Eristad tehnilist õnnestumist sisulisest õigsusest ning oskad vastusest leida kontrollimist vajavad kohad.</p></div>
           <div class="test-question question-tone-0"><span class="question-label">TÕEND <b id="detectiveQuestionNumber">1 / 6</b></span><p id="detectivePrompt"></p></div>
+          <div class="quiz-support"><button class="hint-button" id="detectiveHint" type="button">💡 Ava vihje</button><p class="hint-panel" id="detectiveHintPanel" hidden></p></div>
           <div class="test-options quiz-options" id="detectiveOptions"></div>
           <div class="test-action-row"><div class="test-feedback" id="detectiveFeedback" aria-live="polite">Vali kõige täpsem järeldus.</div><button class="next-question" id="detectiveNext" type="button" hidden>Järgmine →</button></div>
         </section>
 
+      </div>
+      <div class="practice-celebration" id="practiceCelebration" hidden>
+        <span aria-hidden="true">✓</span>
+        <div><small>KÕIK HARJUTUSED TEHTUD</small><h3>Oled kõik viis teemat läbi harjutanud</h3><p>Oskad nüüd valida meetodit, koostada päringut, lugeda R-koodi ja hinnata API vastuse tähendust.</p></div>
+        <button id="restartTests" type="button">↻ Tee harjutused uuesti</button>
       </div>
     </section>
 

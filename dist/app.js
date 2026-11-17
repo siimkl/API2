@@ -20,21 +20,22 @@
     requestFeedback: $("#requestFeedback"), resultViz: $("#resultViz"), chartTitle: $("#chartTitle"),
     barChart: $("#barChart"), chartInsight: $("#chartInsight"), validationSection: $("#validationSection"),
     validationFields: $("#validationFields"), checkScore: $("#checkScore"), takeaway: $("#takeaway"),
-    practiceSuite: $(".practice-suite"), practiceCompleted: $("#practiceCompleted"),
+    practiceSuite: $(".practice-suite"), practiceCompleted: $("#practiceCompleted"), testMap: $("#testMap"),
+    practiceCelebration: $("#practiceCelebration"), restartTests: $("#restartTests"),
     workflowKicker: $("#workflowKicker"), workflowRound: $("#workflowRound"), workflowScore: $("#workflowScore"),
     workflowBar: $("#workflowBar"), workflowQuestionNumber: $("#workflowQuestionNumber"), workflowPrompt: $("#workflowPrompt"),
-    workflowOptions: $("#workflowOptions"), workflowFeedback: $("#workflowFeedback")
+    workflowOptions: $("#workflowOptions"), workflowFeedback: $("#workflowFeedback"), workflowNext: $("#workflowNext")
   };
 
   const initialState = () => ({
     metadata: false, successfulPost: false, responseViewed: false, checks: 0, currentStep: 1,
-    xp: 0, awards: new Set(), completedTests: new Set(),
+    xp: 0, awards: new Set(), completedTests: new Set(), unlockedTests: new Set(["workflow"]), activeTest: "workflow",
     workflow: { next: 0, mistakes: 0, complete: false },
     quizzes: {
-      rcode: { index: 0, score: 0, locked: false, complete: false },
-      url: { index: 0, score: 0, locked: false, complete: false },
-      method: { index: 0, score: 0, locked: false, complete: false },
-      detective: { index: 0, score: 0, locked: false, complete: false }
+      rcode: { index: 0, score: 0, locked: false, complete: false, wrongAnswers: 0, hintUsed: false },
+      url: { index: 0, score: 0, locked: false, complete: false, wrongAnswers: 0, hintUsed: false },
+      method: { index: 0, score: 0, locked: false, complete: false, wrongAnswers: 0, hintUsed: false },
+      detective: { index: 0, score: 0, locked: false, complete: false, wrongAnswers: 0, hintUsed: false }
     }
   });
   let state = initialState();
@@ -124,7 +125,7 @@
 
   const quizDefinitions = {
     rcode: {
-      label: "R-koodilabor",
+      label: "R-i käsud",
       completion: "R-i põhitööriistad on paigas: oskad valikut koostada, tabelit uurida ja andmemahtu hinnata.",
       rounds: [
         {
@@ -150,7 +151,7 @@
       ]
     },
     url: {
-      label: "URL-i ehitaja",
+      label: "URL-päring",
       completion: "Open‑Meteo GET-päring on valmis: tunned parameetrite algust, eraldajat ja Tallinna seitsme päeva valikut.",
       rounds: [
         {
@@ -176,7 +177,7 @@
       ]
     },
     method: {
-      label: "Meetodikompass",
+      label: "Meetodi valik",
       completion: "Meetod valitud: lähtud nüüd ülesande mahust, korduvusest ja olemasolevast ligipääsust.",
       rounds: [
         {
@@ -207,7 +208,7 @@
       ]
     },
     detective: {
-      label: "Vastusedetektiiv",
+      label: "Vastuse tõlgendamine",
       completion: "Juhtum lahendatud: eristad tehnilist edu, andmete tähendust ja eri API-de vastusestruktuure.",
       rounds: [
         {
@@ -243,6 +244,38 @@
       ]
     }
   };
+
+  const quizHints = {
+    rcode: [
+      "Otsi funktsiooni, mis ühendab mitu väärtust üheks vektoriks.",
+      "Küsimus on ridade arvus, mitte veergude nimedes ega tüüpides.",
+      "Selle käsu nimi on lühend ingliskeelsest sõnast structure.",
+      "Korruta iga mõõtme valikute arv: näitajad × tegevusalad × perioodid."
+    ],
+    url: [
+      "See märk paikneb otspunkti ja esimese parameetri vahel.",
+      "Parameetri nimi ja väärtus kasutavad = märki; parameetrite omavaheliseks eraldamiseks on teine märk.",
+      "Tartu näide algab 58.38 ja 26.73; Tallinn asub põhja ja lääne pool.",
+      "Parameetri nimi koosneb sõnadest forecast ja days."
+    ],
+    method: [
+      "Mõtle, kas kolme arvu jaoks tasub enne automatiseerimist programmeerida.",
+      "Kasuta esmalt juba olemasolevat sobivat andmeallikat.",
+      "Korduvus ja automatiseerimine on ühe meetodi suurim tugevus.",
+      "Kui ametlikku masinliidest pole, jääb üle veebilehe lubatud viisil lugemine.",
+      "Regulaarne süsteemidevaheline andmevahetus vajab masinliidest."
+    ],
+    detective: [
+      "Olekukood kirjeldab päringu tehnilist tulemust, mitte arvude tähendust.",
+      "404 tähendab, et soovitud ressurssi ei leitud.",
+      "429 viitab päringusageduse piirangule.",
+      "Maailmapanga vastuse esimene osa on metaandmed, teine osa sisaldab vaatlusi.",
+      "Ilmaprognoos on ajas uuenev hinnang.",
+      "Hea kontroll seob arvu näitaja, ühiku, perioodi ja uuendusajaga."
+    ]
+  };
+
+  const testOrder = ["workflow", "rcode", "url", "method", "detective"];
 
   function populateSelectionOptions() {
     const [indicator, activity, period] = metadataResponse.variables;
@@ -438,8 +471,8 @@
     }
     if (state.checks === 4) {
       setProgress(4, true);
-      setStory(4, "<b>Vastus on vaadatud ja kontrollitud.</b> Järgmisena kinnista kogu API 1 ja API 2 töövoog viies õppemängus.");
-      setGuide("Vastus on kontrollitud. Alusta viieosalist testirada", els.workflowKicker, "Näita testi");
+      setStory(4, "<b>Vastus on vaadatud ja kontrollitud.</b> Järgmisena kinnista API 1 ja API 2 teemad viies lühikeses harjutuses.");
+      setGuide("Vastus on kontrollitud. Alusta esimesest harjutusest", els.workflowKicker, "Näita harjutust");
       return;
     }
     setProgress(4);
@@ -672,8 +705,8 @@
       setPracticeLocked(false);
       award("validation", 25);
       setProgress(4, true);
-      setStory(4, "<b>Sisu ja tähendus on kontrollitud.</b> Järgmisena kinnista kogu API 1 ja API 2 töövoog viies õppemängus.");
-      setGuide("Kontroll on tehtud. Alusta viieosalist testirada", els.workflowKicker, "Näita testi");
+      setStory(4, "<b>Sisu ja tähendus on kontrollitud.</b> Järgmisena kinnista API 1 ja API 2 teemad viies lühikeses harjutuses.");
+      setGuide("Kontroll on tehtud. Alusta esimesest harjutusest", els.workflowKicker, "Näita harjutust");
       window.setTimeout(() => els.workflowOptions.scrollIntoView({ behavior: "smooth", block: "center" }), 220);
     } else if (state.successfulPost) {
       setProgress(4);
@@ -688,6 +721,7 @@
     if (locked) els.practiceSuite.setAttribute("aria-disabled", "true");
     else els.practiceSuite.removeAttribute("aria-disabled");
     $$("button", els.practiceSuite).forEach(button => { button.disabled = locked; });
+    if (!locked) syncTestMap();
   }
 
   function updateQuestionVisual(question, numberLabel, index, total) {
@@ -699,12 +733,70 @@
     question.classList.add("question-updated");
   }
 
+  function syncTestMap() {
+    const suiteLocked = els.practiceSuite.classList.contains("locked");
+    $$('button[data-open-test]', els.testMap).forEach((button, index) => {
+      const id = button.dataset.openTest;
+      const unlocked = state.unlockedTests.has(id) || state.completedTests.has(id);
+      const complete = state.completedTests.has(id);
+      const active = state.activeTest === id;
+      button.disabled = suiteLocked || !unlocked;
+      button.classList.toggle("active", active);
+      button.classList.toggle("done", complete);
+      button.classList.toggle("locked-step", !unlocked);
+      if (active) button.setAttribute("aria-current", "step");
+      else button.removeAttribute("aria-current");
+      const status = button.querySelector("small");
+      status.textContent = complete ? "läbitud" : active ? "praegu" : unlocked ? "avatud" : "lukus";
+      button.querySelector("span").textContent = complete ? "✓" : String(index + 1);
+    });
+  }
+
+  function openTest(id, shouldScroll = true) {
+    if (!state.unlockedTests.has(id) && !state.completedTests.has(id)) return;
+    state.activeTest = id;
+    $$(".practice-card", els.practiceSuite).forEach(card => {
+      card.hidden = card.dataset.test !== id;
+    });
+    syncTestMap();
+    $(`button[data-open-test="${id}"]`, els.testMap)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    if (shouldScroll) {
+      window.setTimeout(() => $(`[data-test="${id}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 40);
+    }
+    syncHeight();
+  }
+
+  function setTestFeedback(target, tone, title, message) {
+    target.className = `test-feedback${tone ? ` ${tone}` : ""}`;
+    const icon = document.createElement("span");
+    icon.className = "feedback-icon";
+    icon.textContent = tone === "good" ? "✓" : tone === "bad" ? "↻" : "i";
+    const copy = document.createElement("span");
+    const heading = document.createElement("strong");
+    heading.textContent = title;
+    const detail = document.createElement("span");
+    detail.textContent = message;
+    copy.append(heading, detail);
+    target.replaceChildren(icon, copy);
+  }
+
+  function revealHint(id) {
+    const quiz = state.quizzes[id];
+    const ui = testElements(id);
+    quiz.hintUsed = true;
+    ui.hintPanel.textContent = quizHints[id][quiz.index];
+    ui.hintPanel.hidden = false;
+    ui.hint.textContent = "💡 Vihje avatud";
+    ui.hint.disabled = true;
+  }
+
   function testElements(id) {
     return {
       card: $(`[data-test="${id}"]`),
       kicker: $(`#${id}Kicker`), round: $(`#${id}Round`), score: $(`#${id}Score`),
       bar: $(`#${id}Bar`), questionNumber: $(`#${id}QuestionNumber`), prompt: $(`#${id}Prompt`),
-      options: $(`#${id}Options`), feedback: $(`#${id}Feedback`), next: $(`#${id}Next`)
+      options: $(`#${id}Options`), feedback: $(`#${id}Feedback`), next: $(`#${id}Next`),
+      hint: $(`#${id}Hint`), hintPanel: $(`#${id}HintPanel`)
     };
   }
 
@@ -714,8 +806,12 @@
     els.practiceCompleted.textContent = `${state.completedTests.size} / 5`;
     $(`[data-test="${id}"]`).classList.add("test-complete");
     award(`test-complete-${id}`, 15);
+    const nextId = testOrder[testOrder.indexOf(id) + 1];
+    if (nextId) state.unlockedTests.add(nextId);
+    syncTestMap();
     if (state.completedTests.size === 5) {
-      setGuide("Kõik viis õppemängu on läbitud. Soovi korral alusta laborit uuesti", els.resetButton, "Alusta algusest");
+      els.practiceCelebration.hidden = false;
+      setGuide("Kõik viis harjutust on tehtud. Soovi korral alusta uuesti", els.resetButton, "Alusta algusest");
     }
   }
 
@@ -728,8 +824,8 @@
     els.workflowBar.style.width = "0%";
     els.workflowQuestionNumber.textContent = `1 / ${workflowSteps.length}`;
     els.workflowPrompt.textContent = "Alusta paketi laadimisest. Seejärel liigu metaandmetest andmetabelini.";
-    els.workflowFeedback.className = "test-feedback";
-    els.workflowFeedback.textContent = "Klõpsa sammul, mis peab tulema esimesena.";
+    setTestFeedback(els.workflowFeedback, "", "Sinu käik", "Klõpsa sammul, mis peab tulema esimesena.");
+    els.workflowNext.hidden = true;
     $$("button[data-step]", els.workflowOptions).forEach(button => {
       button.disabled = false;
       button.classList.remove("placed", "wrong");
@@ -747,8 +843,7 @@
       void button.offsetWidth;
       button.classList.add("wrong");
       window.setTimeout(() => button.classList.remove("wrong"), 520);
-      els.workflowFeedback.className = "test-feedback bad";
-      els.workflowFeedback.textContent = `See samm tuleb hiljem. Praegu otsi: ${workflowSteps[state.workflow.next]}`;
+      setTestFeedback(els.workflowFeedback, "bad", "See samm tuleb hiljem", `Otsi praegu sammu: ${workflowSteps[state.workflow.next]}`);
       return;
     }
 
@@ -758,20 +853,19 @@
     state.workflow.next += 1;
     const done = state.workflow.next === workflowSteps.length;
     els.workflowRound.textContent = `${state.workflow.next} / ${workflowSteps.length}`;
-    els.workflowScore.textContent = state.workflow.mistakes ? `${state.workflow.mistakes} eksimust` : "puhas rada";
+    els.workflowScore.textContent = state.workflow.mistakes ? `${state.workflow.mistakes} ${state.workflow.mistakes === 1 ? "eksimus" : "eksimust"}` : "puhas rada";
     els.workflowBar.style.width = `${(state.workflow.next / workflowSteps.length) * 100}%`;
     els.workflowQuestionNumber.textContent = `${Math.min(state.workflow.next + 1, workflowSteps.length)} / ${workflowSteps.length}`;
 
     if (done) {
       state.workflow.complete = true;
       els.workflowPrompt.textContent = "Töövoog valmis: paketist ja metaandmetest jõudsid kontrollitava R-i andmetabelini.";
-      els.workflowFeedback.className = "test-feedback good";
-      els.workflowFeedback.textContent = "Õige järjekord. Tähtis: valik koostatakse enne andmepäringut ning vastus muudetakse tabeliks alles pärast päringut.";
+      setTestFeedback(els.workflowFeedback, "good", "Töövoog on koos", "Valik koostatakse enne andmepäringut ning vastus muudetakse tabeliks alles pärast päringut.");
+      els.workflowNext.hidden = false;
       markTestComplete("workflow");
-      setGuide("Töövoo ralli tehtud. Järgmisena ava R-koodilabor", $("#rcodeKicker"), "Näita testi");
+      setGuide("R-i töövoo harjutus on tehtud. Järgmisena vaata R-i käske", $("#rcodeKicker"), "Näita harjutust");
     } else {
-      els.workflowFeedback.className = "test-feedback good";
-      els.workflowFeedback.textContent = `Samm ${state.workflow.next} paigas. Järgmisena: ${workflowSteps[state.workflow.next]}`;
+      setTestFeedback(els.workflowFeedback, "good", `Samm ${state.workflow.next} on paigas`, `Järgmisena: ${workflowSteps[state.workflow.next]}`);
     }
     syncHeight();
   }
@@ -786,11 +880,19 @@
     ui.round.textContent = `${quiz.index + 1} / ${definition.rounds.length}`;
     ui.score.textContent = `${quiz.score} ${quiz.score === 1 ? "õige" : "õiget"}`;
     ui.bar.style.width = `${(quiz.index / definition.rounds.length) * 100}%`;
-    ui.feedback.className = "test-feedback";
-    ui.feedback.textContent = id === "url" ? "Vali õige URL-i osa." : id === "method" ? "Vali kõige praktilisem meetod." : id === "detective" ? "Vali kõige täpsem järeldus." : "Vali puuduv käsk või tulemus.";
+    const instruction = id === "url" ? "Vali õige URL-i osa." : id === "method" ? "Vali kõige praktilisem meetod." : id === "detective" ? "Vali kõige täpsem järeldus." : "Vali puuduv käsk või tulemus.";
+    setTestFeedback(ui.feedback, "", "Mõtle esmalt ise", `${instruction} Vajadusel ava vihje.`);
     ui.next.hidden = true;
-    ui.next.textContent = quiz.index === definition.rounds.length - 1 ? "Lõpeta test ✓" : "Järgmine →";
+    delete ui.next.dataset.advanceTo;
+    ui.next.textContent = quiz.index === definition.rounds.length - 1 ? "Lõpeta harjutus ✓" : "Järgmine →";
     quiz.locked = false;
+    quiz.wrongAnswers = 0;
+    quiz.hintUsed = false;
+    ui.hint.hidden = false;
+    ui.hint.disabled = false;
+    ui.hint.textContent = "💡 Ava vihje";
+    ui.hintPanel.hidden = true;
+    ui.hintPanel.textContent = "";
     const letters = ["A", "B", "C", "D"];
     const buttons = round.options.map((option, index) => {
       const answer = document.createElement("button");
@@ -813,31 +915,47 @@
     if (!button || !id || !quizDefinitions[id]) return;
     const quiz = state.quizzes[id];
     if (quiz.locked || quiz.complete) return;
-    quiz.locked = true;
     const definition = quizDefinitions[id];
     const round = definition.rounds[quiz.index];
     const selected = Number(button.dataset.answer);
     const correct = selected === round.correct;
     const ui = testElements(id);
-    if (correct) {
-      quiz.score += 1;
-      award(`${id}-${quiz.index}`, 5);
+
+    if (!correct) {
+      quiz.wrongAnswers += 1;
+      button.disabled = true;
+      button.classList.add("wrong");
+      revealHint(id);
+      setTestFeedback(ui.feedback, "bad", "Veel mitte — proovi uuesti", quizHints[id][quiz.index]);
+      syncHeight();
+      return;
     }
+
+    quiz.locked = true;
+    quiz.score += 1;
+    award(`${id}-${quiz.index}`, 5);
     $$("button[data-answer]", ui.options).forEach((item, index) => {
       item.disabled = true;
       if (index === round.correct) item.classList.add("correct");
     });
-    if (!correct) button.classList.add("wrong");
     ui.score.textContent = `${quiz.score} ${quiz.score === 1 ? "õige" : "õiget"}`;
     ui.bar.style.width = `${((quiz.index + 1) / definition.rounds.length) * 100}%`;
-    ui.feedback.className = `test-feedback ${correct ? "good" : "bad"}`;
-    ui.feedback.textContent = `${correct ? "Õige." : "Vaata märgitud õiget vastust."} ${round.why}`;
+    const title = quiz.wrongAnswers ? "Leidsid õige vastuse" : "Õige esimesel katsel";
+    setTestFeedback(ui.feedback, "good", title, round.why);
+    ui.hint.hidden = true;
+    ui.hintPanel.hidden = true;
     ui.next.hidden = false;
     ui.next.focus({ preventScroll: true });
     syncHeight();
   }
 
   function nextQuizRound(event) {
+    const advanceTo = event.currentTarget.dataset.advanceTo;
+    if (advanceTo) {
+      delete event.currentTarget.dataset.advanceTo;
+      openTest(advanceTo);
+      return;
+    }
     const id = event.currentTarget.closest("[data-test]")?.dataset.test;
     if (!id || !quizDefinitions[id]) return;
     const quiz = state.quizzes[id];
@@ -852,21 +970,38 @@
     quiz.complete = true;
     const ui = testElements(id);
     ui.prompt.textContent = `${definition.label} läbitud: ${quiz.score}/${definition.rounds.length} õiget.`;
-    ui.feedback.className = "test-feedback good";
-    ui.feedback.textContent = definition.completion;
-    ui.next.hidden = true;
+    setTestFeedback(ui.feedback, "good", "Harjutus tehtud", definition.completion);
+    ui.hint.hidden = true;
+    ui.hintPanel.hidden = true;
     markTestComplete(id);
-    const order = ["workflow", "rcode", "url", "method", "detective"];
-    const nextId = order[order.indexOf(id) + 1];
-    if (nextId) setGuide(`${definition.label} tehtud. Järgmisena: ${quizDefinitions[nextId].label}`, $(`#${nextId}Kicker`), "Näita testi");
+    const nextId = testOrder[testOrder.indexOf(id) + 1];
+    if (nextId) {
+      ui.next.hidden = false;
+      ui.next.dataset.advanceTo = nextId;
+      ui.next.textContent = `Jätka: ${quizDefinitions[nextId].label} →`;
+      setGuide(`${definition.label} tehtud. Järgmisena: ${quizDefinitions[nextId].label}`, $(`#${nextId}Kicker`), "Näita harjutust");
+    } else {
+      ui.next.hidden = true;
+      window.setTimeout(() => els.practiceCelebration.scrollIntoView({ behavior: "smooth", block: "center" }), 120);
+    }
     syncHeight();
   }
 
   function resetTests() {
+    state.completedTests = new Set();
+    state.unlockedTests = new Set(["workflow"]);
+    state.activeTest = "workflow";
+    state.workflow = { next: 0, mistakes: 0, complete: false };
+    Object.keys(quizDefinitions).forEach(id => {
+      state.quizzes[id] = { index: 0, score: 0, locked: false, complete: false, wrongAnswers: 0, hintUsed: false };
+    });
     els.practiceCompleted.textContent = "0 / 5";
+    els.practiceCelebration.hidden = true;
     $$(".practice-card", els.practiceSuite).forEach(card => card.classList.remove("test-complete"));
     resetWorkflowTest();
     Object.keys(quizDefinitions).forEach(renderQuiz);
+    openTest("workflow", false);
+    syncTestMap();
   }
 
   function resetLab() {
@@ -946,8 +1081,22 @@
   });
   els.validationFields.addEventListener("change", updateChecks);
   els.workflowOptions.addEventListener("click", chooseWorkflowStep);
+  els.workflowNext.addEventListener("click", () => openTest("rcode"));
+  els.testMap.addEventListener("click", event => {
+    const button = event.target.closest("button[data-open-test]");
+    if (button) openTest(button.dataset.openTest);
+  });
   $$(".quiz-options", els.practiceSuite).forEach(options => options.addEventListener("click", chooseQuizAnswer));
   $$(".next-question", els.practiceSuite).forEach(button => button.addEventListener("click", nextQuizRound));
+  $$(".hint-button", els.practiceSuite).forEach(button => button.addEventListener("click", event => {
+    const id = event.currentTarget.closest("[data-test]")?.dataset.test;
+    if (id && state.quizzes[id] && !state.quizzes[id].locked) revealHint(id);
+  }));
+  els.restartTests.addEventListener("click", () => {
+    resetTests();
+    setPracticeLocked(false);
+    els.testMap.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
   window.addEventListener("message", event => {
     if (event.data?.type === "simfluence:measure" || event.data?.type === "measure") syncHeight();
   });
