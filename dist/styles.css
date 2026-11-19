@@ -2396,56 +2396,6 @@ footer { padding-top: 24px; }
 }
 .practice-celebration button:hover { background: #edf9f7; }
 
-/* Prominent course identity shared by the API 1 and API 2 releases. */
-.course-lockup {
-  position: relative;
-  z-index: 1;
-  display: inline-grid;
-  grid-template-columns: auto auto auto;
-  grid-template-rows: auto auto;
-  align-items: center;
-  width: fit-content;
-  max-width: 100%;
-  padding: 11px 13px 10px;
-  border: 1px solid #b8d3e4;
-  border-radius: 14px;
-  color: #173d69;
-  background: linear-gradient(135deg, rgba(255,255,255,.97), rgba(234,246,251,.96));
-  box-shadow: 0 9px 22px rgba(25,63,111,.11);
-}
-.course-lockup .pulse-dot {
-  grid-row: 1 / 3;
-  align-self: center;
-  margin: 0 13px 0 2px;
-}
-.course-lockup strong {
-  color: #173d69;
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: .13em;
-  line-height: 1.2;
-}
-.course-api {
-  margin-left: 12px;
-  padding: 5px 9px;
-  border-radius: 8px;
-  color: #fff;
-  background: linear-gradient(135deg, #2f60a0, #087f82);
-  box-shadow: 0 5px 12px rgba(25,86,130,.2);
-  font: 800 14px/1 "DM Mono", monospace;
-  letter-spacing: .04em;
-  white-space: nowrap;
-}
-.course-lockup small {
-  grid-column: 2 / -1;
-  margin-top: 5px;
-  color: #536f86;
-  font-size: 10px;
-  font-weight: 850;
-  letter-spacing: .12em;
-  line-height: 1.25;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .test-question.question-updated { animation: none; }
   .workflow-board button.wrong { animation: none; }
@@ -2557,8 +2507,4 @@ footer { padding-top: 24px; }
   .hint-button { width: 100%; }
   .practice-celebration { grid-template-columns: auto 1fr; }
   .practice-celebration button { grid-column: 1 / -1; width: 100%; }
-  .course-lockup { width: 100%; grid-template-columns: auto 1fr auto; }
-  .course-lockup strong { font-size: 13px; letter-spacing: .1em; }
-  .course-lockup small { font-size: 9px; letter-spacing: .09em; }
-  .course-api { margin-left: 8px; }
 }
